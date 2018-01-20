@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Productivity Trackr Options</title>
+  <script src="options.js"></script>
+</head>
+<body>
+  <h1>Productivity Trackr Options</h1>
+
+  <div id="success" style="color: red;"></div>
+
+  <h2>Tracked Sites</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Site Name</th>
+        <th>Site URL</th>
+        <th>Time Limit</th>
+      </tr>
+    </thead>
+    <tbody id="tracked_sites">
+    </tbody>
+  </table>
+
+  <h2>Add Site</h2>
+  <form id="add_site_form" action="#">
+    <div id="error_messages" style="color: red;"></div>
+    <label for="site_name">Site Name</label>
+    <input type="text" name="site_name" id="site_name" required>
+
+    <br>
+
+    <label for="site_url">Site URL</label>
+    <input type="text" name="site_url" id="site_url" required>
+
+    <br>
+
+    <label for="time_limit">Time Limit</label>
+    <input type="number" name="time_limit" id="time_limit" required> hours
+
+    <br>
+
+    <input id="add_site" type="submit" value="Add Site">
+  </form>
+</body>
+</html>
