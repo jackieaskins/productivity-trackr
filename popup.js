@@ -108,15 +108,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+  
   form.addEventListener("submit", function(e){
     e.preventDefault();
     saveData();
   });
-  
-  
 
+  openOptionsPage();
+  document.getElementById("optionsButton").addEventListener("click", function(e) {
+    console.log("listening to button");
+    e.preventDefault();
+    chrome.tabs.create({"url": "/options.html" });
+  });
 });
 
 function hoursToMilliseconds(timeLimit) {
   return parseFloat(timeLimit) * 60 * 60 * 1000;
+}
+
+function openOptionsPage() {
+  document.body.innerHTML += '<button type="button" id="optionsButton">Tracking Options Page</input>';
 }
