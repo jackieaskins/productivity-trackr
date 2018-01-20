@@ -6,6 +6,25 @@ function hoursToMilliseconds(duration) {
   return parseFloat(duration) * 3600000;
 }
 
+function getTrackedSites(callback) {
+  chrome.storage.sync.get('sites', function(data) {
+    var sites = data.sites || {};
+    callback(sites);
+  });
+}
+
+function updateTrackedSitesList() {
+  var trackedSites = document.getElementById('tracked_sites');
+  trackedSites.innerHTML = '';
+  getTrackedSites(function(sites) {
+    Object.keys(sites).forEach(function(site) {
+      trackedSites.innerHTML += (
+        "<tr><td>" + sites[site]['name'] + "</td><td>" + site + "</td><td>" + millisecondsToHours(sites[site]['timeLimit']) + " hours</td></tr>"
+      )
+    });
+  });
+}
+
 function addSite(e) {
   e.preventDefault();
   var errorMessages = document.getElementById('error_messages');
@@ -28,9 +47,7 @@ function addSite(e) {
   }
 
   if (siteName !== '' && siteURL !== '' && timeLimit !== '') {
-    chrome.storage.sync.get("sites", function(data) {
-      var sites = data.sites || {};
-
+    getTrackedSites(function(sites) {
       if (siteURL in sites) {
         errorMessages.innerHTML += 'You already have a time limit set for this URL.';
         return;
@@ -45,7 +62,7 @@ function addSite(e) {
         siteNameInput.value = '';
         siteURLInput.value = '';
         timeLimitInput.value = '';
-        updateTrackedSites();
+        updateTrackedSitesList();
       });
     });
   }
@@ -53,21 +70,7 @@ function addSite(e) {
   addSiteButton.disabled = false;
 }
 
-function updateTrackedSites() {
-  var trackedSites = document.getElementById('tracked_sites');
-  trackedSites.innerHTML = '';
-  chrome.storage.sync.get('sites', function(data) {
-    var sites = data.sites || {};
-    console.log(sites);
-    Object.keys(sites).forEach(function(site) {
-      trackedSites.innerHTML += (
-        "<tr><td>" + sites[site]['name'] + "</td><td>" + site + "</td><td>" + millisecondsToHours(sites[site]['timeLimit']) + " hours</td></tr>"
-      )
-    });
-  });
-}
-
 document.addEventListener("DOMContentLoaded", function(event) {
   document.getElementById('add_site_form').addEventListener('submit', function(event) { addSite(event) });
-  updateTrackedSites();
+  updateTrackedSitesList();
 });
