@@ -5,7 +5,7 @@
   "description": "Be more productive!",
   "version": "0.0",
 
-  "broswer_action": {
+  "browser_action": {
     "default_popup": "popup.html"
   },
 
