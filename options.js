@@ -13,14 +13,32 @@ function getTrackedSites(callback) {
   });
 }
 
+function removeSite(e, site) {
+  e.preventDefault();
+
+  getTrackedSites(function(sites) {
+    delete sites[site];
+    chrome.storage.sync.set({ 'sites': sites }, function() {
+      updateTrackedSitesList();
+    });
+  });
+}
+
 function updateTrackedSitesList() {
   var trackedSites = document.getElementById('tracked_sites');
   trackedSites.innerHTML = '';
   getTrackedSites(function(sites) {
+    var forms = [];
     Object.keys(sites).forEach(function(site) {
       trackedSites.innerHTML += (
-        "<tr><td>" + sites[site]['name'] + "</td><td>" + site + "</td><td>" + millisecondsToHours(sites[site]['timeLimit']) + " hours</td></tr>"
+        "<tr><td>" + sites[site]['name'] + "</td><td>" + site + "</td><td>" + millisecondsToHours(sites[site]['timeLimit']) + ' hours</td><td><button value="' + site + '" id="delete_' + site + '">Remove</button></td></tr>'
       )
+    });
+    Object.keys(sites).forEach(function(site) {
+      var button = document.getElementById('delete_' + site);
+      button.addEventListener('click', function(event) {
+        removeSite(event, button.value);
+      });
     });
   });
 }
